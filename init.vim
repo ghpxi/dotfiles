@@ -15,6 +15,8 @@ Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
 Plug 'scrooloose/nerdcommenter'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
 
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -31,11 +33,12 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'justinmk/vim-syntax-extra'
 
-Plug 'klen/python-mode'
+" Plug 'klen/python-mode'
 Plug 'davidhalter/jedi-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
+Plug 'mattn/emmet-vim'
 
 call plug#end()
 filetype on
@@ -59,6 +62,7 @@ set showmatch
 set hlsearch
 set gdefault
 set updatetime=250
+set list
 set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:.
 set clipboard+=unnamed
 set smarttab
@@ -73,6 +77,8 @@ set showcmd
 set splitright
 set splitbelow
 
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/*,*.pyc
+
 set background=light
 colorscheme lucius
 
@@ -82,9 +88,10 @@ cnoreabbrev Ack Ack!
 
 nnoremap <F8> :TagbarToggle<CR>
 nnoremap <C-\> :NERDTreeToggle<CR>
+nnoremap <A-\> :NERDTreeFocus<CR>
 nnoremap <leader>] :bn<CR>
 nnoremap <leader>[ :bp<CR>
-nnoremap <leader>a :Ack!<Space>
+nnoremap <leader>a :Ack! --ignore-dir=migrations --ignore-dir=logs --ignore-dir=node_modules --python<Space>
 nnoremap <leader>q :Bdelete<CR>
 nnoremap <leader>s :SyntasticCheck<CR>
 nnoremap <leader>c <plug>NERDCommenterToggle
@@ -94,6 +101,13 @@ if executable('ag')
 endif
 
 let g:indent_guides_enable_on_vim_startup=1
+
+let g:ctrlp_user_command = 'find %s -type f'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = {
+    \ 'dir': '\v[\/](\.git|node_modules)',
+    \ 'file': '\v\.(pyc|log|tmp)$',
+    \ }
 
 let g:pymode_folding = 0
 let g:pymode_run = 0
@@ -109,7 +123,7 @@ let g:NERDTrimTrailingWhitespace = 1
 let g:NERDDefaultAlign = 'left'
 let g:NERDTreeDirArrows = 0
 
-let g:nerdtree_tabs_open_on_console_startup = 1
+let g:nerdtree_tabs_open_on_console_startup = 0
 let g:nerdtree_tabs_no_startup_for_diff = 1
 let g:nerdtree_tabs_smart_startup_focus = 2
 
