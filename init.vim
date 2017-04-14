@@ -8,24 +8,18 @@ call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'jreybert/vimagit'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'mileszs/ack.vim'
 Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
 Plug 'scrooloose/nerdcommenter'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
 
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'easymotion/vim-easymotion'
-Plug 'nathanaelkane/vim-indent-guides'
 Plug 'moll/vim-bbye'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'jistr/vim-nerdtree-tabs'
 
 Plug 'chriskempson/base16-vim'
 Plug 'flazz/vim-colorschemes'
@@ -33,12 +27,10 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'justinmk/vim-syntax-extra'
 
-" Plug 'klen/python-mode'
 Plug 'davidhalter/jedi-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
-Plug 'mattn/emmet-vim'
 
 call plug#end()
 filetype on
@@ -94,7 +86,12 @@ nnoremap <leader>[ :bp<CR>
 nnoremap <leader>a :Ack! --ignore-dir=migrations --ignore-dir=logs --ignore-dir=node_modules --python<Space>
 nnoremap <leader>q :Bdelete<CR>
 nnoremap <leader>s :SyntasticCheck<CR>
+nnoremap <leader>S :SyntasticReset<CR>
 nnoremap <leader>c <plug>NERDCommenterToggle
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
@@ -102,19 +99,8 @@ endif
 
 let g:indent_guides_enable_on_vim_startup=1
 
-let g:ctrlp_user_command = 'find %s -type f'
+let g:ctrlp_user_command = ['.git', 'cd %s and; git ls-files -co --exclude-standard']
 let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_custom_ignore = {
-    \ 'dir': '\v[\/](\.git|node_modules)',
-    \ 'file': '\v\.(pyc|log|tmp)$',
-    \ }
-
-let g:pymode_folding = 0
-let g:pymode_run = 0
-let g:pymode_doc = 0
-let g:pymode_rope = 0
-let g:pymode_lint = 0
-let g:pymode_lint_on_fly = 0
 
 let g:NERDTreeIgnore = ['\~$', '\.pyc$', '\.pyo$', '\.class$', 'pip-log\.txt$', '\.o$', '\.swp$', '__pycache__']
 let g:NERDCompactSexyComs = 1
@@ -131,8 +117,15 @@ let g:Powerline_symbols = 'fancy'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
-let g:syntastic_mode_map = {
-    \ 'mode': 'passive',
-    \ 'active_filetypes': [],
-    \ 'passive_filetypes': []
-    \ }
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_python_pylint_quiet_messages = {
+    \ "!level": "errors",
+    \}
